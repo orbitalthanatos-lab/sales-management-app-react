@@ -1,0 +1,236 @@
+/* ==============================
+   ACCOUNT PAGE
+============================== */
+
+.account-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.account-card {
+  width: 100%;
+  max-width: 520px;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.account-avatar {
+  display: block;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid rgba(255, 255, 255, 0.08);
+}
+
+.account-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 32px;
+}
+
+.account-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.account-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+}
+
+.account-label {
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.account-value {
+  color: #ffffff;
+  text-align: right;
+  word-break: break-word;
+}
+
+#backBtn {
+  width: 100%;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .account-card {
+    padding: 28px 22px;
+    border-radius: 20px;
+  }
+
+  .account-title {
+    font-size: 26px;
+  }
+
+  .account-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .account-value {
+    text-align: left;
+  }
+}
+
+/* ==============================
+   PREMIUM ACCOUNT ANIMATIONS
+============================== */
+
+.account-card {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.account-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+}
+
+.account-avatar {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.account-avatar:hover {
+  transform: scale(1.03);
+}
+
+.account-row {
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.account-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(2px);
+}
+
+/* ==============================
+   PUBLIC STOREFRONT
+============================== */
+
+.public-store-section {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+}
+
+.public-store-title {
+  margin: 0 0 24px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+}
+
+.public-store-field {
+  margin-bottom: 20px;
+}
+
+.public-store-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.public-store-input,
+.public-store-url {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.public-store-input {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.public-store-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.public-store-url {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+  word-break: break-all;
+}
+
+.public-store-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.public-store-actions .nav-btn {
+  width: auto;
+  justify-content: center;
+}
+
+.public-store-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.public-store-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: #3b82f6;
+}
+
+#saveStoreSettingsBtn {
+  width: 100%;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .public-store-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .public-store-actions .nav-btn {
+    width: 100%;
+  }
+}

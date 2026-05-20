@@ -1,0 +1,576 @@
+/* ==============================
+   STATS LAYOUT
+============================== */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+
+
+/* ==============================
+   SHARED CARD BASE (DESKTOP STATS)
+============================== */
+
+.card {
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  padding: 18px;
+  border-radius: 14px;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+  transition: all 0.2s ease;
+
+  position: relative;
+  overflow: visible;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+/* Text */
+.card p:not(.card-price) {
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: #94a3b8;
+}
+
+.card h2 {
+  margin-top: 6px;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.card small {
+  display: block;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* ==============================
+   CARD HIGHLIGHTS
+============================== */
+
+.card.highlight-green {
+  border: 1px solid #22c55e;
+  box-shadow: 0 0 12px rgba(34,197,94,0.4);
+}
+
+.card.highlight-blue {
+  border: 1px solid #3b82f6;
+  box-shadow: 0 0 12px rgba(59,130,246,0.4);
+}
+
+.card.highlight-red {
+  border: 1px solid #dc2626;
+  box-shadow: 0 0 12px rgba(220,38,38,0.4);
+}
+
+
+/* ==============================
+   MOBILE ITEM CARD (MAIN CARD)
+============================== */
+
+.item-card {
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  padding: 18px;
+  border-radius: 14px;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+  transition: all 0.25s ease;
+}
+
+.item-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+
+/* ==============================
+   STATUS SYSTEM
+============================== */
+
+/* ---------- DESKTOP TABLE ---------- */
+tr.status-disponible {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+}
+
+tr.status-reservado {
+  background: #3f2a00;
+}
+
+tr.status-vendido {
+  background: #052e16;
+}
+
+/* ---------- MOBILE CARDS ---------- */
+.item-card.status-reservado {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid #f59e0b;
+}
+
+.item-card.status-vendido {
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid #16a34a;
+}
+
+
+/* ==============================
+   STATUS BADGE (PILL)
+============================== */
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* Mobile-specific (scoped correctly) */
+.item-card.status-disponible .status-badge {
+  background: #1e293b;
+  color: #94a3b8;
+}
+
+.item-card.status-reservado .status-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.item-card.status-vendido .status-badge {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+
+/* ==============================
+   SMALL UTILITIES
+============================== */
+
+.card-status {
+  margin: 6px 0;
+}
+
+.card-id {
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+
+/* ==============================
+   STYLE DISABLE BUTTONS
+============================== */
+
+.btn.link.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ==============================
+   ITEM NUMBER DISPLAY
+============================== */
+
+.item-id {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+/* ==============================
+   CARD VIEW (NEW)
+   ============================== */
+
+.view-toggle {
+  margin-bottom: 10px;
+}
+
+.view-toggle button {
+  padding: 8px 12px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.cards-grid {
+  z-index: 2;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
+  overflow: visible;
+}
+
+/* CARD */
+.flip-card {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  perspective: 1000px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.flip-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* FRONT & BACK */
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px; /* 🔥 match modern style */
+  backface-visibility: hidden;
+}
+
+/* FRONT */
+.flip-card-front {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Overlay for title text on front */
+.card-overlay {
+  font-size: 14px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.85),
+    rgba(0,0,0,0.4),
+    transparent
+  );
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* TITLE */
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* BOTTOM ROW */
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Price styling */
+.card-price {
+  font-size: 18px;
+  font-weight: 800;
+  color: #22c55e;
+}
+
+/* STATUS BADGE */
+.card-status-badge {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+  margin-right: 32px;
+}
+
+/* STATUS COLORS */
+.card-status-badge.disponible {
+  background: rgba(34,197,94,0.2);
+  color: #22c55e;
+}
+
+.card-status-badge.reservado {
+  background: rgba(245,158,11,0.2);
+  color: #f59e0b;
+}
+
+.card-status-badge.vendido {
+  background: rgba(59,130,246,0.2);
+  color: #3b82f6;
+}
+
+/* BACK */
+.flip-card-back {
+  background: linear-gradient(145deg, #111827, #020617);
+  color: white;
+  padding: 16px;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* BUTTON */
+.flip-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: white;
+
+  padding: 6px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.flip-btn:hover {
+  background: rgba(0,0,0,0.85);
+  transform: scale(1.1);
+}
+
+.flip-card-front::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /*background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8),
+    rgba(0, 0, 0, 0.3),
+    transparent 60%
+  );*/
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.card-overlay {
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+}
+
+/* ==============================
+   CARD BACK REDESIGN
+============================== */
+
+.card-back-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* SECTION */
+.card-back-section {
+  margin-bottom: 12px;
+}
+
+/* ROWS */
+.card-back-section .row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 4px;
+  color: #cbd5f5;
+}
+
+/* LABEL */
+.card-back-section .row span:first-child {
+  color: #94a3b8;
+}
+
+/* PROFIT */
+.card-back-section .row.profit span:last-child {
+  font-weight: 700;
+  color: #22c55e;
+}
+
+/* ==============================
+   CARD PLATFORM BADGES
+============================== */
+
+.card-platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.platform-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+/* ==============================
+   CARD DESCRIPTION
+============================== */
+
+.card-back-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.card-description {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #cbd5e1;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ==============================
+   CARD PLATFORM ICONS
+============================== */
+
+.card-platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.card-platform-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  border-radius: 6px;
+  padding: 2px;
+
+  opacity: 0.65;
+  transition: all 0.2s ease;
+}
+
+.card-platform-icon.selected {
+  opacity: 1;
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.35);
+}
+
+.card-platform-icon.sold {
+  opacity: 1;
+  border: 1px solid #22c55e;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.45);
+}
+
+/* ==============================
+   CARD BACK ACTION BUTTONS
+============================== */
+
+.card-back-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.card-action-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 16px;
+
+  background: rgba(15, 23, 42, 0.8);
+  color: #e2e8f0;
+
+  transition: all 0.2s ease;
+}
+
+.card-action-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(30, 41, 59, 1);
+}
+
+.card-action-btn.edit:hover {
+  color: #60a5fa;
+  box-shadow: 0 0 10px rgba(96, 165, 250, 0.35);
+}
+
+.card-action-btn.delete:hover {
+  color: #f87171;
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.35);
+}
+
+/* ==============================
+   HIDE CARD ACTION BUTTONS UNTIL HOVER
+============================== */
+
+.card-back-actions {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: all 0.50s ease;
+}
+
+/* Show buttons when hovering over the card */
+.flip-card:hover .card-back-actions {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Also show buttons when the card is flipped */
+.flip-card.flipped .card-back-actions {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}

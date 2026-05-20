@@ -1,0 +1,354 @@
+// ==============================
+// BULK IMPORT LOGIC
+// ==============================
+
+import { supabase } from "./supabase.js";
+import { parseItemFile, extractUploadId } from "./items.logic.js";
+import { currentUser } from "./script.js";
+import { showNotification } from "./notification.ui.js";
+
+// ==============================
+// MAIN IMPORT FUNCTION
+// ==============================
+
+export async function importFromFolder(files) {
+    try {
+        document.dispatchEvent(new CustomEvent("import:start"));
+
+        const grouped = groupFilesByFolder(files);
+
+        const statusEl = document.getElementById("importStatus");
+        const folderNames = Object.keys(grouped);
+
+        // 🔢 Get base item_number ONCE (before loop)
+        const { data: lastItems, error: lastError } = await supabase
+        .from("items")
+        .select("item_number")
+        .eq("user_id", currentUser.id)
+        .order("item_number", { ascending: false })
+        .limit(1);
+
+        if (lastError) throw lastError;
+
+        let baseNumber =
+        lastItems && lastItems.length > 0
+            ? lastItems[0].item_number
+            : 0;
+
+        const total = folderNames.length;
+        let current = 0;
+
+        // Import counters
+        let importedCount = 0;
+        let duplicateCount = 0;
+
+        // Detailed import log
+        const importedItems = [];
+        const duplicateItems = [];
+        const errorItems = [];
+
+        for (const folderName of folderNames) {
+            current++;
+
+            if (statusEl) {
+                statusEl.innerText = `Importing items... (${current} / ${total})`;
+            }
+
+            const fileGroup = grouped[folderName];
+
+            // 🔥 1. FIND TXT FILE
+            const txtFile = fileGroup.find(f => f.name.toLowerCase() === "data.txt");
+
+            if (!txtFile) {
+                console.warn(`Skipping ${folderName} (no data.txt)`);
+                continue;
+            }
+
+            const text = await readFileAsText(txtFile);
+
+            // Extract upload_id from the master prompt text
+            const uploadId = extractUploadId(text);
+
+            // Check if this upload_id already exists for the current user
+            if (uploadId) {
+                const { data: existingItem, error: duplicateError } = await supabase
+                    .from("items")
+                    .select("id")
+                    .eq("user_id", currentUser.id)
+                    .eq("upload_id", uploadId)
+                    .maybeSingle();
+
+                if (duplicateError) {
+                    throw duplicateError;
+                }
+
+                if (existingItem) {
+                    duplicateCount++;
+
+                    // Try to extract a readable product title
+                    const title =
+                        extractValue(text, "TÍTULO") ||
+                        extractValue(text, "TITLE") ||
+                        folderName;
+
+                    // Save to detailed import log
+                    duplicateItems.push(title);
+
+                    console.log(`⏭️ Duplicate skipped: ${title}`);
+                    continue;
+                }
+            }
+
+            // 🔥 2. PARSE TXT
+            const platforms = parseDataText(text);
+
+            // 1️⃣ Prepare date
+            const today = new Date().toISOString().split("T")[0];
+
+            // 2️⃣ Calculate next item_number
+            const nextItemNumber = ++baseNumber;
+
+            // 3️⃣ Insert item and get ID
+            const { data: itemData, error: itemError } = await supabase
+            .from("items")
+            .insert([
+                {
+                status: "Disponible",
+                date_published: today,
+                user_id: currentUser.id,
+                item_number: nextItemNumber,
+
+                // Save upload_id for duplicate detection
+                upload_id: uploadId || null
+                }
+            ])
+            .select()
+            .single();
+
+            if (itemError) {
+                // 23505 = unique constraint violation (duplicate upload_id)
+                if (itemError.code === "23505") {
+                    duplicateCount++;
+
+                    const duplicateTitle =
+                        extractValue(text, "TÍTULO") ||
+                        extractValue(text, "TITLE") ||
+                        folderName;
+
+                    duplicateItems.push(duplicateTitle);
+
+                    console.log(`⏭️ Duplicate skipped: ${duplicateTitle}`);
+                    continue;
+                }
+
+                const errorTitle =
+                    extractValue(text, "TÍTULO") ||
+                    extractValue(text, "TITLE") ||
+                    folderName;
+
+                errorItems.push(errorTitle);
+
+                throw itemError;
+            }
+
+            const itemId = itemData.id;
+
+            // 🔥 4. INSERT PLATFORMS
+            for (const p of platforms) {
+
+                // 🔍 DEBUG → see what we are sending
+                console.log("PLATFORM DATA:", p);
+
+                try {
+                    await supabase.from("item_platforms").upsert(
+                        {
+                            item_id: itemId,
+                            platform: p.platform,
+                            title: p.title,
+                            description: p.description,
+                            price: parseFloat(p.price) || 0,
+                            fees: parseFloat(p.fees) || 0,
+                            buy: 0,
+                            url: p.url || ""
+                        },
+                        { onConflict: "id" }
+                    );
+                } catch (err) {
+                    console.error("PLATFORM INSERT ERROR:", err);
+                }
+            }
+
+            // 🔥 5. UPLOAD IMAGES
+            const imageFiles = fileGroup.filter(f =>
+                /\.(jpg|jpeg|png|webp)$/i.test(f.name)
+            );
+
+            const uploadedUrls = [];
+
+            for (let file of imageFiles) {
+                const filePath = `${itemId}/${Date.now()}_${file.name}`;
+
+                const { error } = await supabase.storage
+                    .from("items")
+                    .upload(filePath, file);
+
+                if (error) {
+                    console.error("Upload error:", error.message);
+                    continue;
+                }
+
+                const { data } = supabase.storage
+                    .from("items")
+                    .getPublicUrl(filePath);
+
+                uploadedUrls.push(data.publicUrl);
+            }
+
+            // 🔥 6. SAVE IMAGES TO DB
+            if (uploadedUrls.length > 0) {
+                const { data: existing } = await supabase
+                    .from("items")
+                    .select("images")
+                    .eq("id", itemId)
+                    .single();
+
+                const existingImages = existing?.images || [];
+
+                await supabase
+                    .from("items")
+                    .update({
+                        images: [...existingImages, ...uploadedUrls]
+                    })
+                    .eq("id", itemId);
+            }
+
+            importedCount++;
+
+            // Try to extract a readable product title
+            const importedTitle =
+                extractValue(text, "TÍTULO") ||
+                extractValue(text, "TITLE") ||
+                folderName;
+
+            // Save to detailed import log
+            importedItems.push(importedTitle);
+
+            console.log(`✅ Imported ${importedTitle}`);
+        }
+
+        if (statusEl) {
+            statusEl.innerText = "Import completed ✅";
+        }
+
+        // Build detailed import log
+        let message = "";
+
+        // Imported items
+        if (importedItems.length > 0) {
+            message += `Imported (${importedItems.length}):\n`;
+            message += importedItems.map(title => `- ${title}`).join("\n");
+        }
+
+        // Duplicate items
+        if (duplicateItems.length > 0) {
+            if (message) message += "\n\n";
+            message += `Duplicates (${duplicateItems.length}):\n`;
+            message += duplicateItems.map(title => `- ${title}`).join("\n");
+        }
+
+        // Error items
+        if (errorItems.length > 0) {
+            if (message) message += "\n\n";
+            message += `Errors (${errorItems.length}):\n`;
+            message += errorItems.map(title => `- ${title}`).join("\n");
+        }
+
+        // Fallback message
+        if (!message) {
+            message = "No items were imported.";
+        }
+
+        const modal = document.getElementById("importResultsModal");
+        const textarea = document.getElementById("importResultsText");
+
+        if (modal && textarea) {
+            textarea.value = message;
+            modal.classList.remove("hidden");
+            document.body.style.overflow = "hidden";
+        } else {
+            // Fallback if modal is missing
+            showNotification(message, "info", 6000);
+        }
+
+        document.dispatchEvent(new CustomEvent("import:end"));
+
+    } catch (err) {
+        console.error(err);
+        showNotification("Error during bulk import.", "error");
+        document.dispatchEvent(new CustomEvent("import:end"));
+    }
+}
+
+// ==============================
+//  TXT PARSING
+// ==============================
+
+function parseDataText(text) {
+    const sections = text.split("=== ").slice(1);
+
+    return sections.map(section => {
+        const platform = section.split(" ===")[0].trim().toLowerCase();
+
+        return {
+            platform,
+            url: extractValue(section, "LINK"),
+            title: extractValue(section, "TÍTULO"),
+            description: extractValue(section, "DESCRIPCIÓN"),
+            price: extractValue(section, "PRECIO"),
+            fees: extractValue(section, "COMISION")
+        };
+    });
+}
+
+// ==============================
+// VALUE EXTRACTION
+// ==============================
+
+function extractValue(text, key) {
+    const regex = new RegExp(`\\[${key}[^\\]]*\\][\\s\\S]*?\\n([^\\[]+)`);
+    const match = text.match(regex);
+
+    return match ? match[1].trim().replace("€", "") : "";
+}
+
+// ==============================
+// HELPERS
+// ==============================
+
+function groupFilesByFolder(files) {
+    const groups = {};
+
+    for (const file of files) {
+        const path = file.webkitRelativePath;
+        const parts = path.split("/");
+
+        // ✅ ALWAYS take the folder name (second-to-last element)
+        const folder = parts.length > 1
+            ? parts[parts.length - 2]
+            : parts[0];
+
+        if (!groups[folder]) groups[folder] = [];
+        groups[folder].push(file);
+    }
+
+    return groups;
+}
+
+function readFileAsText(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsText(file);
+    });
+}

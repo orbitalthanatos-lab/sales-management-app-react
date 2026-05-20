@@ -1,0 +1,278 @@
+/* ==============================
+   HEADER LAYOUT
+============================== */
+
+.header {
+  position: relative; /* 🔥 required */
+  z-index: 100;
+  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 12px 20px;
+  margin: 16px auto;
+  max-width: 1200px;
+
+  background: #0f172a;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.header-left h1 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.header-left {
+  z-index: 2;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.header-actions {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* 🔥 TRUE CENTER */
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  /*background: rgba(187, 6, 6, 0.04);
+  padding: 6px;
+  border-radius: 999px;*/
+}
+
+.header > .header-actions {
+  justify-self: center;
+}
+
+/* ==============================
+   RESPONSIVE HEADER
+============================== */
+
+@media (max-width: 900px) {
+
+  .header-actions {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .header-actions .nav-btn {
+    width: 100%;
+    text-align: left;
+    padding: 12px;
+  }
+}
+
+/* ==============================
+   MOBILE MENU PRO
+============================== */
+
+.menu-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Animate menu */
+@media (max-width: 900px) {
+
+  .header-actions {
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: 0.25s ease;
+  }
+
+}
+
+/* ==============================
+   ACTION MENU (MOBILE)
+============================== */
+
+.actions-btn {
+  display: none;
+
+  background: transparent;
+  border: none;
+
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  padding: 4px 8px;
+  border-radius: 8px;
+
+  transition: background 0.2s ease;
+}
+
+.actions-btn:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* DROPDOWN */
+
+.actions-dropdown {
+  position: absolute;
+
+  top: 42px;
+  right: 0;
+
+  width: 180px;
+
+  background: #1e293b;
+
+  border: 1px solid rgba(255,255,255,0.06);
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.35);
+
+  z-index: 999;
+
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+/* HIDDEN STATE */
+
+.actions-dropdown.hidden {
+  opacity: 0;
+  transform: translateY(-8px);
+
+  pointer-events: none;
+}
+
+/* ITEMS */
+
+.actions-dropdown .dropdown-item {
+  width: 100%;
+
+  background: transparent;
+  border: none;
+
+  color: white;
+
+  text-align: left;
+
+  padding: 14px 16px;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+.actions-dropdown .dropdown-item:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+/* HIDDEN */
+
+.hidden {
+  display: none;
+}
+
+/* MOBILE */
+
+@media (max-width: 900px) {
+
+  .actions-btn {
+    display: block;
+  }
+
+}
+
+/* ==============================
+   MOBILE HEADER POLISH
+============================== */
+
+@media (max-width: 900px) {
+
+  .header {
+    padding: 14px 16px;
+  }
+
+  .header-right {
+    gap: 6px;
+  }
+
+  #userMenu {
+    gap: 8px;
+  }
+
+  #userName {
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+}
+
+/* ==============================
+   PREMIUM HEADER ANIMATIONS
+============================== */
+
+/* Header navigation buttons */
+.header .nav-btn,
+.actions-btn {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.header .nav-btn:hover,
+.actions-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* User menu hover */
+#userMenu {
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+#userMenu:hover {
+  transform: translateY(-1px);
+}
+
+/* Dropdown items */
+#userDropdown .dropdown-item,
+.actions-dropdown .dropdown-item {
+  transition:
+    background 0.2s ease,
+    padding-left 0.2s ease;
+}
+
+#userDropdown .dropdown-item:hover,
+.actions-dropdown .dropdown-item:hover {
+  padding-left: 20px;
+}
+
+/* Dropdown container lift */
+#userDropdown,
+.actions-dropdown {
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}

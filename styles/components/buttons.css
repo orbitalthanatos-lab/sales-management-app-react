@@ -1,0 +1,33 @@
+/* ==============================
+   NAV BUTTONS (HEADER)
+============================== */
+
+.nav-btn {
+  position: relative;
+  z-index: 2;
+
+  padding: 8px 14px;
+  border-radius: 999px;
+
+  background: transparent;
+  border: none;
+  color: #cbd5f5;
+  font-size: 14px;
+  cursor: pointer;
+
+  transition: color 0.25s ease;
+}
+
+/* Hover */
+.nav-btn:hover {
+  background: rgba(59, 130, 246, 0.15);
+  color: #ffffff;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* Active */
+.nav-btn.active {
+  background: #2563eb;
+  color: white;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}

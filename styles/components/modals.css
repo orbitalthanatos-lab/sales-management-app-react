@@ -1,0 +1,272 @@
+/* ==============================
+   MODAL
+============================== */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Hidden state */
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  width: 500px;
+  max-height: 90vh;
+  overflow-y: hidden;
+  position: relative;
+  z-index: 1001;
+}
+
+.close {
+  float: right;
+  cursor: pointer;
+}
+
+/* ==============================
+   IMPORT MODAL
+============================== */
+
+.import-modal {
+  max-width: 600px;
+  width: 90%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+}
+
+.modal-status {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* ==============================
+   IMPORT RESULTS MODAL
+============================== */
+
+.import-results-modal-content {
+  max-width: 760px;
+  width: 95%;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.import-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.import-results-title-group {
+  flex: 1;
+}
+
+.import-results-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.import-results-subtitle {
+  margin: 8px 0 0;
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+.import-results-body {
+  padding: 24px 28px;
+}
+
+.import-results-text {
+  width: 100%;
+  min-height: 420px;
+  padding: 20px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #f8fafc;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  white-space: pre;
+  resize: vertical;
+  outline: none;
+}
+
+.import-results-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 0 28px 28px;
+}
+
+/* ==============================
+   REUSABLE MODAL CLOSE BUTTON
+============================== */
+
+.modal-close-wrapper {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 16px;
+  flex-shrink: 0;
+}
+
+.modal-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 9999px;
+  background: rgba(51, 65, 85, 0.85);
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: rgba(71, 85, 105, 0.95);
+  color: #ffffff;
+}
+
+.modal-close-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
+}
+
+.modal-close-btn svg {
+  pointer-events: none;
+}
+
+.modal-close-tooltip {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.modal-close-wrapper:hover .modal-close-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ==============================
+   IMPORT TEXT ITEM MODAL
+============================== */
+
+.import-modal-content {
+  max-width: 900px;
+  width: 95%;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.import-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.import-modal-title-group {
+  flex: 1;
+}
+
+.import-modal-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.import-modal-subtitle {
+  margin: 8px 0 0;
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+.import-modal-body {
+  padding: 24px 28px;
+}
+
+.import-modal-textarea {
+  width: 100%;
+  min-height: 420px;
+  padding: 20px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #f8fafc;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.7;
+  resize: vertical;
+  outline: none;
+}
+
+.import-modal-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 0 28px 20px;
+}
+
+.import-modal-status {
+  padding: 0 28px 28px;
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
