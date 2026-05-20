@@ -1,10 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import supabase from '../services/supabase';
 import '../styles/pages/login.css';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [checkingSession, setCheckingSession] = useState(true);
+
+  useEffect(() => {
+    checkUserSession();
+  }, []);
+
+  async function checkUserSession() {
+    const { data } = await supabase.auth.getUser();
+
+    if (data.user) {
+      alert('User already logged in.');
+      // Later we will redirect to DashboardPage
+    }
+
+    setCheckingSession(false);
+  }
 
   async function handleLogin() {
     const { error } = await supabase.auth.signInWithPassword({
@@ -20,10 +36,26 @@ function LoginPage() {
     alert('Login successful!');
   }
 
+  async function handleGoogleLogin() {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin
+      }
+    });
+  }
+
+  if (checkingSession) {
+    return (
+      <div className="app">
+        <h2>Checking session...</h2>
+      </div>
+    );
+  }
+
   return (
     <div className="login-page">
       <div className="login-layout">
-        {/* LEFT SHOWCASE PANEL */}
         <div className="login-showcase">
           <div className="login-showcase-overlay"></div>
 
@@ -51,7 +83,6 @@ function LoginPage() {
           </div>
         </div>
 
-        {/* RIGHT LOGIN PANEL */}
         <div className="login-card">
           <div className="login-brand">
             <div className="login-logo">📦</div>
@@ -79,9 +110,7 @@ function LoginPage() {
               type="password"
               placeholder="Password"
               value={password}
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
@@ -102,7 +131,10 @@ function LoginPage() {
             <span>OR</span>
           </div>
 
-          <button className="btn-google">
+          <button
+            className="btn-google"
+            onClick={handleGoogleLogin}
+          >
             Continue with Google
           </button>
 
