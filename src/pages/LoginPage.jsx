@@ -1,0 +1,125 @@
+import { useState } from 'react';
+import supabase from '../services/supabase';
+import '../styles/pages/login.css';
+
+function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  async function handleLogin() {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    alert('Login successful!');
+  }
+
+  return (
+    <div className="login-page">
+      <div className="login-layout">
+        {/* LEFT SHOWCASE PANEL */}
+        <div className="login-showcase">
+          <div className="login-showcase-overlay"></div>
+
+          <div className="login-showcase-content">
+            <div className="login-badge">
+              Sales Management App
+            </div>
+
+            <h1 className="login-showcase-title">
+              Manage Your Business Beautifully Organized
+            </h1>
+
+            <p className="login-showcase-description">
+              Track products, inventory, sales, and public storefronts
+              from one powerful cloud-based dashboard.
+            </p>
+
+            <div className="login-showcase-dots">
+              <span className="login-dot active"></span>
+              <span className="login-dot"></span>
+              <span className="login-dot"></span>
+              <span className="login-dot"></span>
+              <span className="login-dot"></span>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT LOGIN PANEL */}
+        <div className="login-card">
+          <div className="login-brand">
+            <div className="login-logo">📦</div>
+            <p className="login-app-name">
+              Sales Management App
+            </p>
+          </div>
+
+          <h2>Welcome Back</h2>
+
+          <p className="login-subtitle">
+            Sign in to continue managing your products,
+            inventory, and sales.
+          </p>
+
+          <input
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <div className="password-field">
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
+            />
+          </div>
+
+          <div className="password-actions">
+            <span className="forgot-password-link">
+              Forgot your password?
+            </span>
+          </div>
+
+          <button
+            className="btn-login"
+            onClick={handleLogin}
+          >
+            Log In
+          </button>
+
+          <div className="divider">
+            <span>OR</span>
+          </div>
+
+          <button className="btn-google">
+            Continue with Google
+          </button>
+
+          <p className="signup-text">
+            No account?{' '}
+            <span className="signup-link">
+              Create your free account
+            </span>
+          </p>
+
+          <p className="security-text">
+            🔒 Secure login powered by Supabase
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default LoginPage;
