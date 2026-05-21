@@ -45,6 +45,25 @@ function LoginPage() {
     });
   }
 
+  async function handleSignup() {
+    if (!email || !password) {
+      alert('Please enter email and password.');
+      return;
+    }
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password
+    });
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    alert('Check your email to confirm signup.');
+  }
+
   if (checkingSession) {
     return (
       <div className="app">
@@ -138,12 +157,12 @@ function LoginPage() {
             Continue with Google
           </button>
 
-          <p className="signup-text">
-            No account?{' '}
-            <span className="signup-link">
-              Create your free account
-            </span>
-          </p>
+          <span
+            className="signup-link"
+            onClick={handleSignup}
+          >
+            Create your free account
+          </span>
 
           <p className="security-text">
             🔒 Secure login powered by Supabase
