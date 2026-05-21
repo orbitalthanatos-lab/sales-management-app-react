@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import supabase from '../services/supabase';
 import '../styles/pages/login.css';
 
@@ -6,6 +8,7 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [checkingSession, setCheckingSession] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     checkUserSession();
@@ -33,7 +36,7 @@ function LoginPage() {
       return;
     }
 
-    alert('Login successful!');
+    navigate('/dashboard');
   }
 
   async function handleGoogleLogin() {
@@ -157,12 +160,12 @@ function LoginPage() {
             Continue with Google
           </button>
 
-          <span
+          <Link
+            to="/signup"
             className="signup-link"
-            onClick={handleSignup}
           >
             Create your free account
-          </span>
+          </Link>
 
           <p className="security-text">
             🔒 Secure login powered by Supabase

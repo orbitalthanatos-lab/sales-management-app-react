@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import supabase from '../services/supabase';
 import '../styles/pages/login.css';
 
@@ -28,13 +29,13 @@ function SignupPage() {
         // Check if account already exists
         const { data: loginData } =
             await supabase.auth.signInWithPassword({
-            email,
-            password
+                email,
+                password
             });
 
         if (loginData?.user) {
             alert(
-            'An account with this email already exists. Try logging in instead.'
+                'An account with this email already exists. Try logging in instead.'
             );
 
             return;
@@ -45,9 +46,9 @@ function SignupPage() {
             email,
             password,
             options: {
-            data: {
-                full_name: fullName
-            }
+                data: {
+                    full_name: fullName
+                }
             }
         });
 
@@ -59,7 +60,7 @@ function SignupPage() {
         alert(
             'Account created successfully. Please check your email.'
         );
-        }
+    }
 
     async function handleGoogleSignup() {
         await supabase.auth.signInWithOAuth({
@@ -166,7 +167,14 @@ function SignupPage() {
                     </button>
 
                     <p className="signup-text">
-                        Already have an account?
+                        Already have an account?{' '}
+
+                        <Link
+                            to="/login"
+                            className="signup-link"
+                        >
+                            Log in
+                        </Link>
                     </p>
 
                     <p className="security-text">
