@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import supabase from '../services/supabase';
 import '../styles/pages/login.css';
+import Notification from '../components/notifications/Notification';
 
 function SignupPage() {
     const [fullName, setFullName] = useState('');
@@ -9,6 +10,27 @@ function SignupPage() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] =
         useState('');
+    const [notification, setNotification] =
+        useState({
+            visible: false,
+            message: '',
+            type: 'success'
+        });
+
+    function showNotification(message, type) {
+        setNotification({
+            visible: true,
+            message,
+            type
+        });
+
+        setTimeout(() => {
+            setNotification((prev) => ({
+                ...prev,
+                visible: false
+            }));
+        }, 3000);
+    }
 
     async function handleSignup() {
         if (
@@ -17,12 +39,18 @@ function SignupPage() {
             !password ||
             !confirmPassword
         ) {
-            alert('Please complete all fields.');
+            showNotification(
+                'Please complete all fields.',
+                'error'
+            );
             return;
         }
 
         if (password !== confirmPassword) {
-            alert('Passwords do not match.');
+            showNotification(
+                'Passwords do not match.',
+                'error'
+            );
             return;
         }
 
@@ -34,8 +62,9 @@ function SignupPage() {
             });
 
         if (loginData?.user) {
-            alert(
-                'An account with this email already exists. Try logging in instead.'
+            showNotification(
+                'An account with this email already exists.',
+                'info'
             );
 
             return;
@@ -53,12 +82,13 @@ function SignupPage() {
         });
 
         if (error) {
-            alert(error.message);
+            showNotification(error.message, 'error');
             return;
         }
 
-        alert(
-            'Account created successfully. Please check your email.'
+        showNotification(
+            'Account created successfully. Please check your email.',
+            'success'
         );
     }
 
@@ -72,117 +102,125 @@ function SignupPage() {
     }
 
     return (
-        <div className="login-page">
-            <div className="login-layout">
-                {/* LEFT PANEL */}
-                <div className="login-showcase">
-                    <div className="login-showcase-overlay"></div>
+        <>
+            <Notification
+                visible={notification.visible}
+                message={notification.message}
+                type={notification.type}
+            />
 
-                    <div className="login-showcase-content">
-                        <div className="login-badge">
-                            Sales Management App
+            <div className="login-page">
+                <div className="login-layout">
+                    {/* LEFT PANEL */}
+                    <div className="login-showcase">
+                        <div className="login-showcase-overlay"></div>
+
+                        <div className="login-showcase-content">
+                            <div className="login-badge">
+                                Sales Management App
+                            </div>
+
+                            <h1 className="login-showcase-title">
+                                Create Your Business Workspace
+                            </h1>
+
+                            <p className="login-showcase-description">
+                                Start managing products, inventory,
+                                customers, and sales from one modern
+                                dashboard.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* RIGHT PANEL */}
+                    <div className="login-card">
+                        <div className="login-brand">
+                            <div className="login-logo">📦</div>
+
+                            <p className="login-app-name">
+                                Sales Management App
+                            </p>
                         </div>
 
-                        <h1 className="login-showcase-title">
-                            Create Your Business Workspace
-                        </h1>
+                        <h2>Create Account</h2>
 
-                        <p className="login-showcase-description">
-                            Start managing products, inventory,
-                            customers, and sales from one modern
-                            dashboard.
+                        <p className="login-subtitle">
+                            Start your free account and begin managing
+                            your business today.
                         </p>
-                    </div>
-                </div>
 
-                {/* RIGHT PANEL */}
-                <div className="login-card">
-                    <div className="login-brand">
-                        <div className="login-logo">📦</div>
+                        <input
+                            type="text"
+                            placeholder="Full Name"
+                            value={fullName}
+                            onChange={(e) =>
+                                setFullName(e.target.value)
+                            }
+                        />
 
-                        <p className="login-app-name">
-                            Sales Management App
-                        </p>
-                    </div>
+                        <input
+                            type="email"
+                            placeholder="Email Address"
+                            value={email}
+                            onChange={(e) =>
+                                setEmail(e.target.value)
+                            }
+                        />
 
-                    <h2>Create Account</h2>
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) =>
+                                setPassword(e.target.value)
+                            }
+                        />
 
-                    <p className="login-subtitle">
-                        Start your free account and begin managing
-                        your business today.
-                    </p>
+                        <input
+                            type="password"
+                            placeholder="Confirm Password"
+                            value={confirmPassword}
+                            onChange={(e) =>
+                                setConfirmPassword(e.target.value)
+                            }
+                        />
 
-                    <input
-                        type="text"
-                        placeholder="Full Name"
-                        value={fullName}
-                        onChange={(e) =>
-                            setFullName(e.target.value)
-                        }
-                    />
-
-                    <input
-                        type="email"
-                        placeholder="Email Address"
-                        value={email}
-                        onChange={(e) =>
-                            setEmail(e.target.value)
-                        }
-                    />
-
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) =>
-                            setPassword(e.target.value)
-                        }
-                    />
-
-                    <input
-                        type="password"
-                        placeholder="Confirm Password"
-                        value={confirmPassword}
-                        onChange={(e) =>
-                            setConfirmPassword(e.target.value)
-                        }
-                    />
-
-                    <button
-                        className="btn-login"
-                        onClick={handleSignup}
-                    >
-                        Create Account
-                    </button>
-
-                    <div className="divider">
-                        <span>OR</span>
-                    </div>
-
-                    <button
-                        className="btn-google"
-                        onClick={handleGoogleSignup}
-                    >
-                        Continue with Google
-                    </button>
-
-                    <p className="signup-text">
-                        Already have an account?{' '}
-
-                        <Link
-                            to="/login"
-                            className="signup-link"
+                        <button
+                            className="btn-login"
+                            onClick={handleSignup}
                         >
-                            Log in
-                        </Link>
-                    </p>
+                            Create Account
+                        </button>
 
-                    <p className="security-text">
-                        🔒 Secure signup powered by Supabase
-                    </p>
+                        <div className="divider">
+                            <span>OR</span>
+                        </div>
+
+                        <button
+                            className="btn-google"
+                            onClick={handleGoogleSignup}
+                        >
+                            Continue with Google
+                        </button>
+
+                        <p className="signup-text">
+                            Already have an account?{' '}
+
+                            <Link
+                                to="/login"
+                                className="signup-link"
+                            >
+                                Log in
+                            </Link>
+                        </p>
+
+                        <p className="security-text">
+                            🔒 Secure signup powered by Supabase
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 
