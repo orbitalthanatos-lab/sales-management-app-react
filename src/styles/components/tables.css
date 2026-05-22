@@ -375,3 +375,140 @@ td:nth-child(4) {
 .action-btn.upload:hover {
   color: #3b82f6;
 }
+
+/* ==============================
+   CUSTOM TABLE STYLE (INVENTORY)
+============================== */
+
+.inventory-table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.inventory-table thead th {
+  text-align: left;
+
+  padding: 18px;
+
+  color: #94a3b8;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  border-bottom:
+    1px solid rgba(255,255,255,0.05);
+}
+
+.inventory-table tbody tr {
+  transition:
+    background 0.2s ease;
+}
+
+.inventory-table tbody tr:hover {
+  background:
+    rgba(255,255,255,0.02);
+}
+
+.inventory-table tbody td {
+  padding: 18px;
+
+  vertical-align: middle;
+
+  border-bottom:
+    1px solid rgba(255,255,255,0.04);
+}
+
+.table-image {
+  width: 68px;
+  height: 68px;
+
+  object-fit: cover;
+
+  border-radius: 12px;
+}
+
+.table-product {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.table-title {
+  color: white;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.table-id {
+  color: #64748b;
+
+  font-size: 12px;
+}
+
+.table-price {
+  color: white;
+
+  font-weight: 700;
+}
+
+.table-profit {
+  color: #22c55e;
+
+  font-weight: 700;
+}
+
+.table-status {
+  background:
+    rgba(34,197,94,0.16);
+
+  color: #22c55e;
+
+  padding:
+    6px
+    12px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.platform-icons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 18px;
+}
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-actions button {
+  width: 36px;
+  height: 36px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background:
+    rgba(255,255,255,0.06);
+
+  color: white;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease;
+}
+
+.table-actions button:hover {
+  background:
+    rgba(255,255,255,0.12);
+}

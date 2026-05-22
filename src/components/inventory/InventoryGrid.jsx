@@ -1,4 +1,5 @@
 import InventoryCard from './InventoryCard';
+import InventoryTable from './InventoryTable';
 
 function InventoryGrid({
   items,
@@ -6,9 +7,7 @@ function InventoryGrid({
 }) {
   if (view === 'table') {
     return (
-      <div className="table-placeholder">
-        Table View Coming Next
-      </div>
+      <InventoryTable items={items} />
     );
   }
 
