@@ -4,7 +4,7 @@ import {
 
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
-import DashboardPage from './pages/DashboardPage';
+import InventoryPage from './pages/InventoryPage';
 import ProtectedRoute from './components/common/ProtectedRoute';
 
 const router = createBrowserRouter([
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
         path: '/dashboard',
         element: (
             <ProtectedRoute>
-                <DashboardPage />
+                <InventoryPage />
             </ProtectedRoute>
         )
     }
