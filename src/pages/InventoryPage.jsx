@@ -9,6 +9,10 @@ import InventoryGrid from '../components/inventory/InventoryGrid';
 import '../styles/main.css';
 
 function InventoryPage() {
+
+  const [view, setView] =
+    useState('cards');
+
   const [items] = useState([
     {
       id: 1,
@@ -54,9 +58,15 @@ function InventoryPage() {
       <main className="container">
         <StatsCards />
 
-        <InventoryToolbar />
+        <InventoryToolbar
+          view={view}
+          setView={setView}
+        />
 
-        <InventoryGrid items={items} />
+        <InventoryGrid
+          items={items}
+          view={view}
+        />
       </main>
     </>
   );
