@@ -1,81 +1,161 @@
+import { useState } from 'react';
+import milanunciosIcon from '../../assets/icons/platforms/milanuncios.png';
+import vintedIcon from '../../assets/icons/platforms/vinted.png';
+import wallapopIcon from '../../assets/icons/platforms/wallapop.png';
+
 function InventoryTable({ items }) {
-  return (
-    <div className="table-wrapper">
-      <table className="inventory-table">
-        <thead>
-          <tr>
-            <th>Image</th>
 
-            <th>Product</th>
+    const [expandedItem, setExpandedItem] =
+        useState(null);
 
-            <th>Price</th>
+    return (
+        <div className="table-wrapper">
+            <table className="inventory-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
 
-            <th>Profit</th>
+                        <th>Product</th>
 
-            <th>Status</th>
+                        <th>Price</th>
 
-            <th>Platforms</th>
+                        <th>Profit</th>
 
-            <th>Actions</th>
-          </tr>
-        </thead>
+                        <th>Status</th>
 
-        <tbody>
-          {items.map((item) => (
-            <tr key={item.id}>
-              <td className="table-image-cell">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="table-image"
-                />
-              </td>
+                        <th>Platforms</th>
 
-              <td>
-                <div className="table-product">
-                  <span className="table-title">
-                    {item.title}
-                  </span>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
 
-                  <span className="table-id">
-                    ITEM-{item.id}
-                  </span>
-                </div>
-              </td>
+                <tbody>
+                    {items.map((item) => (
+                        <>
+                            <tr
+                                key={item.id}
+                                className="inventory-row"
+                            >
+                                <td className="table-image-cell">
+                                    <img
+                                        src={item.image}
+                                        alt={item.title}
+                                        className="table-image"
+                                    />
+                                </td>
 
-              <td className="table-price">
-                {item.price}
-              </td>
+                                <td>
+                                    <div className="table-product">
+                                        <span className="table-title">
+                                            {item.title}
+                                        </span>
 
-              <td className="table-profit">
-                50.00 €
-              </td>
+                                        <span className="table-id">
+                                            ITEM-{item.id}
+                                        </span>
+                                    </div>
+                                </td>
 
-              <td>
-                <span className="table-status">
-                  {item.status}
-                </span>
-              </td>
+                                <td className="table-price">
+                                    {item.price}
+                                </td>
 
-              <td>
-                <div className="platform-icons">
-                  <span>🛒</span>
-                  <span>📦</span>
-                </div>
-              </td>
+                                <td className="table-profit">
+                                    50.00 €
+                                </td>
 
-              <td>
-                <div className="table-actions">
-                  <button>✏️</button>
-                  <button>🗑️</button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+                                <td>
+                                    <span className="table-status">
+                                        {item.status}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div className="platform-icons">
+                                        <img
+                                            src={wallapopIcon}
+                                            alt="Wallapop"
+                                            className="platform-icon"
+                                        />
+
+                                        <img
+                                            src={vintedIcon}
+                                            alt="Vinted"
+                                            className="platform-icon"
+                                        />
+
+                                        <img
+                                            src={milanunciosIcon}
+                                            alt="Milanuncios"
+                                            className="platform-icon"
+                                        />
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div className="table-actions">
+                                        <button className="action-btn">
+                                            ✏️
+                                        </button>
+
+                                        <button className="action-btn">
+                                            🗑️
+                                        </button>
+
+                                        <button
+                                            className="action-btn"
+                                            onClick={() =>
+                                                setExpandedItem(
+                                                    expandedItem === item.id
+                                                        ? null
+                                                        : item.id
+                                                )
+                                            }
+                                        >
+                                            {expandedItem === item.id
+                                                ? '▲'
+                                                : '▼'}
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            {expandedItem === item.id && (
+                                <tr className="expanded-row">
+                                    <td colSpan="7">
+                                        <div className="expanded-content">
+                                            <div>
+                                                <strong>Description:</strong>
+                                                <p>
+                                                    Camuflaje Woodland original.
+                                                    Excelente estado.
+                                                </p>
+                                            </div>
+
+                                            <div>
+                                                <strong>Purchase Price:</strong>
+                                                <p>40.00 €</p>
+                                            </div>
+
+                                            <div>
+                                                <strong>Commission:</strong>
+                                                <p>10.00 €</p>
+                                            </div>
+
+                                            <div>
+                                                <strong>Published:</strong>
+                                                <p>12 May 2026</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )}
+                        </>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
 }
 
 export default InventoryTable;
