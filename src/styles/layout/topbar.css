@@ -105,3 +105,72 @@
   font-size: 14px;
   font-weight: 600;
 }
+
+
+
+/* ==============================
+   USER DROPDOWN 
+============================== */
+
+.user-menu {
+  position: relative;
+}
+
+.user-dropdown {
+  position: absolute;
+
+  top: calc(100% + 12px);
+  right: 0;
+
+  width: 190px;
+
+  overflow: hidden;
+
+  border-radius: 18px;
+
+  background:
+    rgba(30,41,59,0.98);
+
+  border:
+    1px solid rgba(255,255,255,0.06);
+
+  box-shadow:
+    0 14px 34px rgba(0,0,0,0.35);
+
+  backdrop-filter: blur(14px);
+
+  z-index: 999;
+}
+
+.user-dropdown-item {
+  width: 100%;
+
+  padding:
+    16px
+    18px;
+
+  border: none;
+
+  background: transparent;
+
+  color: white;
+
+  text-align: left;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease;
+}
+
+.user-dropdown-item:hover {
+  background:
+    rgba(255,255,255,0.06);
+}
+
+.user-dropdown-item.logout {
+  color: #f87171;
+}

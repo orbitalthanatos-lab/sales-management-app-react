@@ -3,6 +3,7 @@ import '../../styles/main.css';
 import UserMenu from './UserMenu';
 
 function Topbar() {
+
   return (
     <header className="topbar">
       <div className="topbar-inner">

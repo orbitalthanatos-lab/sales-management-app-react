@@ -40,10 +40,11 @@ function LoginPage() {
     const { data } = await supabase.auth.getUser();
 
     if (data.user) {
-      showNotification(
-        'User already logged in.',
-        'info'
-      );
+
+      navigate('/dashboard');
+
+      return;
+
     }
 
     setCheckingSession(false);
