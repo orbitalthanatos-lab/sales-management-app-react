@@ -5,6 +5,10 @@ import supabase from '../services/supabase';
 import '../styles/pages/login.css';
 import Notification from '../components/notifications/Notification.jsx';
 
+// =====================================
+// Login Page Component
+// =====================================
+
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,10 +40,83 @@ function LoginPage() {
     checkUserSession();
   }, []);
 
+  // =====================================
+  // Ensure user profile exists after login
+  // =====================================
+
+  async function ensureUserProfile(user) {
+
+    const { data: existingProfile } =
+      await supabase
+        .from('public_profiles')
+        .select('user_id')
+        .eq('user_id', user.id)
+        .single();
+
+    if (existingProfile) {
+      return;
+    }
+
+    const email =
+      user.email || '';
+
+    const emailPrefix =
+      email
+        .split('@')[0]
+        ?.toLowerCase()
+        ?.replace(/[^a-z0-9]/g, '');
+
+    const slug =
+      `${emailPrefix}-${Math.floor(Math.random() * 10000)}`;
+
+    const metadata =
+      user.user_metadata || {};
+
+    const displayName =
+      metadata.full_name ||
+      metadata.name ||
+      emailPrefix;
+
+    const avatarUrl =
+      metadata.avatar_url ||
+      metadata.picture ||
+      '';
+
+    await supabase
+      .from('public_profiles')
+      .insert({
+
+        user_id: user.id,
+
+        email: email,
+
+        public_slug: slug,
+
+        store_name:
+          `${displayName}'s Store`,
+
+        display_name: displayName,
+
+        avatar_url: avatarUrl,
+
+        is_public: false,
+
+        onboarding_completed: false
+
+      });
+
+  }
+
+  // =====================================
+  // Check if user is already logged in
+  // =====================================
+
   async function checkUserSession() {
     const { data } = await supabase.auth.getUser();
 
     if (data.user) {
+
+      await ensureUserProfile(data.user);
 
       navigate('/dashboard');
 
@@ -50,8 +127,15 @@ function LoginPage() {
     setCheckingSession(false);
   }
 
+  // =====================================
+  // Handle login
+  // =====================================
+
   async function handleLogin() {
-    const { error } = await supabase.auth.signInWithPassword({
+    const {
+      data,
+      error
+    } = await supabase.auth.signInWithPassword({
       email,
       password
     });
@@ -59,6 +143,10 @@ function LoginPage() {
     if (error) {
       showNotification(error.message, 'error');
       return;
+    }
+
+    if (data.user) {
+      await ensureUserProfile(data.user);
     }
 
     showNotification(
@@ -71,6 +159,10 @@ function LoginPage() {
     }, 1000);
   }
 
+  // =====================================
+  // Handle Google OAuth login
+  // =====================================
+
   async function handleGoogleLogin() {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -79,6 +171,10 @@ function LoginPage() {
       }
     });
   }
+
+  // =====================================
+  // Handle signup (for /signup page)
+  // =====================================
 
   async function handleSignup() {
     if (!email || !password) {
