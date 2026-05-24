@@ -66,19 +66,25 @@ function InventoryCard({ item }) {
 
           <div className="inventory-card-detail">
             <strong>Compra</strong>
-            <span>50.00 €</span>
+
+            <span>
+              {item.buy}
+            </span>
           </div>
 
           <div className="inventory-card-detail">
             <strong>Comisión</strong>
-            <span>0.00 €</span>
+
+            <span>
+              {item.fees}
+            </span>
           </div>
 
           <div className="inventory-card-detail">
             <strong>Beneficio</strong>
 
             <span className="profit-text">
-              50.00 €
+              {item.profit}
             </span>
           </div>
 
@@ -86,7 +92,7 @@ function InventoryCard({ item }) {
             <strong>Descripción</strong>
 
             <p>
-              Monedas originales de medio dólar Kennedy.
+              {item.description}
             </p>
           </div>
 

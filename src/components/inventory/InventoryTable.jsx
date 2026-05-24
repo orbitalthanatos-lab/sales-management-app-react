@@ -61,7 +61,7 @@ function InventoryTable({ items }) {
                                 </td>
 
                                 <td className="table-profit">
-                                    50.00 €
+                                    {item.profit}
                                 </td>
 
                                 <td>
@@ -124,28 +124,39 @@ function InventoryTable({ items }) {
                                 <tr className="expanded-row">
                                     <td colSpan="7">
                                         <div className="expanded-content">
+
                                             <div>
                                                 <strong>Description:</strong>
+
                                                 <p>
-                                                    Camuflaje Woodland original.
-                                                    Excelente estado.
+                                                    {item.description}
                                                 </p>
                                             </div>
 
                                             <div>
                                                 <strong>Purchase Price:</strong>
-                                                <p>40.00 €</p>
+
+                                                <p>
+                                                    {item.buy}
+                                                </p>
                                             </div>
 
                                             <div>
                                                 <strong>Commission:</strong>
-                                                <p>10.00 €</p>
+
+                                                <p>
+                                                    {item.fees}
+                                                </p>
                                             </div>
 
                                             <div>
-                                                <strong>Published:</strong>
-                                                <p>12 May 2026</p>
+                                                <strong>Profit:</strong>
+
+                                                <p className="table-profit">
+                                                    {item.profit}
+                                                </p>
                                             </div>
+
                                         </div>
                                     </td>
                                 </tr>

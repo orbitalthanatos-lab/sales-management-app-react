@@ -103,6 +103,18 @@ function InventoryPage() {
         const firstPlatform =
           item.item_platforms?.[0];
 
+        const price =
+          Number(firstPlatform?.price || 0);
+
+        const buy =
+          Number(firstPlatform?.buy || 0);
+
+        const fees =
+          Number(firstPlatform?.fees || 0);
+
+        const profit =
+          price - buy - fees;
+
         return {
 
           id: item.id,
@@ -111,11 +123,29 @@ function InventoryPage() {
             firstPlatform?.title ||
             'Untitled Item',
 
+          description:
+            firstPlatform?.description || '',
+
           price:
-            `${firstPlatform?.price || 0} €`,
+            `${price} €`,
+
+          buy:
+            `${buy.toFixed(2)} €`,
+
+          fees:
+            `${fees.toFixed(2)} €`,
+
+          profit:
+            `${profit.toFixed(2)} €`,
 
           status:
             item.status || 'available',
+
+          platform:
+            firstPlatform?.platform || '',
+
+          url:
+            firstPlatform?.url || '',
 
           image:
             'https://placehold.co/600x600'
