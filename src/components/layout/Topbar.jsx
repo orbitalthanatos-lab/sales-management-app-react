@@ -2,7 +2,9 @@ import '../../styles/main.css';
 
 import UserMenu from './UserMenu';
 
-function Topbar() {
+function Topbar({
+  openImportModal
+}) {
 
   return (
     <header className="topbar">
@@ -28,7 +30,10 @@ function Topbar() {
         </div>
 
         <div className="topbar-right">
-          <button className="nav-btn">
+          <button
+            className="nav-btn"
+            onClick={openImportModal}
+          >
             Import
           </button>
 

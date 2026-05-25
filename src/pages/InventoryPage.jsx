@@ -8,7 +8,7 @@ import Topbar from '../components/layout/Topbar';
 import StatsCards from '../components/inventory/StatsCards';
 import InventoryToolbar from '../components/inventory/InventoryToolbar';
 import InventoryGrid from '../components/inventory/InventoryGrid';
-
+import ImportModal from '../components/import/ImportModal';
 
 import '../styles/main.css';
 
@@ -17,7 +17,13 @@ function InventoryPage() {
   const [importText, setImportText] =
     useState('');
 
+  const [importImages, setImportImages] =
+    useState([]);
+
   const [importLoading, setImportLoading] =
+    useState(false);
+
+  const [showImportModal, setShowImportModal] =
     useState(false);
 
   const [view, setView] =
@@ -41,10 +47,13 @@ function InventoryPage() {
       setImportLoading(true);
 
       await processImportText(
-        importText
+        importText,
+        importImages
       );
 
       await fetchItems();
+
+      setShowImportModal(false);
 
       alert('Item imported successfully');
 
@@ -85,7 +94,8 @@ function InventoryPage() {
       .from('items')
       .select(`
       *,
-      item_platforms (*)
+      item_platforms (*),
+      item_images (*)
     `)
       .eq('user_id', user.id)
       .order('created_at', {
@@ -148,6 +158,7 @@ function InventoryPage() {
             firstPlatform?.url || '',
 
           image:
+            item.item_images?.[0]?.url ||
             'https://placehold.co/600x600'
 
         };
@@ -166,34 +177,15 @@ function InventoryPage() {
 
   return (
     <>
-      <Topbar />
+      <Topbar
+        openImportModal={() =>
+          setShowImportModal(true)
+        }
+      />
 
       <main className="container">
+
         <StatsCards />
-
-        <div className="import-box">
-
-          <textarea
-            value={importText}
-            onChange={(e) =>
-              setImportText(e.target.value)
-            }
-            placeholder="Paste MASTER PROMPT text here..."
-            rows={12}
-          />
-
-          <button
-            onClick={handleImport}
-            disabled={importLoading}
-          >
-
-            {importLoading
-              ? 'Importing...'
-              : 'Import Item'}
-
-          </button>
-
-        </div>
 
         <InventoryToolbar
           view={view}
@@ -204,9 +196,25 @@ function InventoryPage() {
           items={items}
           view={view}
         />
+
       </main>
+
+      <ImportModal
+        isOpen={showImportModal}
+        onClose={() =>
+          setShowImportModal(false)
+        }
+        importText={importText}
+        setImportText={setImportText}
+        importImages={importImages}
+        setImportImages={setImportImages}
+        handleImport={handleImport}
+        importLoading={importLoading}
+      />
+
     </>
   );
+
 }
 
 export default InventoryPage;
