@@ -159,7 +159,12 @@ function InventoryPage() {
 
           image:
             item.item_images?.[0]?.url ||
-            'https://placehold.co/600x600'
+            'https://placehold.co/600x600',
+
+          images:
+            item.item_images?.map(
+              (image) => image.url
+            ) || [],
 
         };
 
